@@ -1,0 +1,1089 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сальве | Дашборд рекламы</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --ink: #18202b;
+      --muted: #657184;
+      --line: #dfe5ee;
+      --blue: #1d6fd8;
+      --green: #15945f;
+      --amber: #bd7a16;
+      --red: #c94646;
+      --shadow: 0 10px 28px rgba(24, 32, 43, .08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    button, select {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 28px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: clamp(22px, 3vw, 34px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--blue);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+    }
+
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .year-group {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 7px;
+      align-items: center;
+      min-width: 0;
+      padding: 6px;
+      border: 1px solid #edf1f6;
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .year-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .month-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .month-btn {
+      min-width: 38px;
+      height: 26px;
+      padding: 0 7px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #f8fafc;
+      color: var(--ink);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .month-btn.active {
+      border-color: var(--blue);
+      background: #eaf3ff;
+      color: #0b55ad;
+      font-weight: 700;
+    }
+
+    .toolbar-actions {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding-top: 6px;
+    }
+
+    .compact-btn {
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .compact-btn.primary {
+      border-color: #b9d2f2;
+      background: #eef6ff;
+      color: #0b55ad;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .kpi, .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .kpi {
+      min-height: 88px;
+      padding: 12px;
+      display: grid;
+      align-content: space-between;
+      gap: 8px;
+    }
+
+    .kpi span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .kpi strong {
+      font-size: clamp(18px, 2.2vw, 26px);
+      line-height: 1;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .kpi small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .panel {
+      min-width: 0;
+      padding: 12px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .legend {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: -1px;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 230px;
+      min-height: 230px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    .summary {
+      margin-bottom: 12px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th, td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    th:first-child, td:first-child {
+      text-align: left;
+      position: sticky;
+      left: 0;
+      background: var(--panel);
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      background: #f8fafc;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .good { color: var(--green); font-weight: 700; }
+    .bad { color: var(--red); font-weight: 700; }
+
+    .campaign-table {
+      max-height: 520px;
+      overflow: auto;
+    }
+
+    .campaign-table th,
+    .campaign-table td {
+      text-align: left !important;
+    }
+
+    .month-cell {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .campaign-groups {
+      display: grid;
+      gap: 12px;
+    }
+
+    .campaign-month {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .campaign-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: #f8fafc;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .campaign-toggle strong {
+      font-size: 14px;
+    }
+
+    .campaign-toggle span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .campaign-toggle strong::before {
+      content: '▾';
+      display: inline-block;
+      width: 18px;
+      color: var(--blue);
+    }
+
+    .campaign-month.collapsed .campaign-toggle {
+      border-bottom: 0;
+    }
+
+    .campaign-month.collapsed .campaign-toggle strong::before {
+      content: '▸';
+    }
+
+    .campaign-month.collapsed .campaign-table {
+      display: none;
+    }
+
+    .tooltip {
+      position: fixed;
+      z-index: 4;
+      pointer-events: none;
+      max-width: 220px;
+      padding: 8px 10px;
+      border: 1px solid #cfd8e6;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(24, 32, 43, .14);
+      color: var(--ink);
+      font-size: 12px;
+      opacity: 0;
+      transform: translate(-50%, -115%);
+      transition: opacity .12s ease;
+      white-space: pre-line;
+    }
+
+    .loading {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--muted);
+    }
+
+    @media (max-width: 860px) {
+      .shell { width: min(100% - 20px, 1180px); padding-top: 14px; }
+      .top, .toolbar { grid-template-columns: 1fr; }
+      .source-link { justify-content: center; }
+      .toolbar-actions { justify-content: stretch; padding-top: 0; }
+      .compact-btn { flex: 1; }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .charts { grid-template-columns: 1fr; }
+      .chart-wrap { height: 220px; min-height: 220px; }
+      .panel-head { align-items: flex-start; flex-direction: column; }
+      .legend { justify-content: flex-start; }
+    }
+
+    @media (max-width: 520px) {
+      body { font-size: 13px; }
+      .top { gap: 10px; margin-bottom: 10px; }
+      .source-link { min-height: 32px; }
+      .month-grid { grid-template-columns: 1fr; }
+      .year-group { grid-template-columns: 42px minmax(0, 1fr); }
+      .month-btn { width: 100%; min-width: 0; padding: 0 6px; }
+      .month-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .kpi { min-height: 78px; padding: 10px; }
+      .kpi strong { font-size: 21px; }
+      .kpi small { font-size: 11px; }
+      .chart-wrap { height: 220px; min-height: 220px; }
+      th, td { padding: 8px; }
+      .campaign-month-head,
+      .campaign-toggle { padding: 9px 10px; }
+      .campaign-toggle span { font-size: 11px; }
+      .campaign-table { max-height: none; overflow: visible; }
+      .campaign-table table { min-width: 0; }
+      .campaign-table thead { display: none; }
+      .campaign-table tbody,
+      .campaign-table tr,
+      .campaign-table td { display: block; }
+      .campaign-table tr {
+        padding: 10px;
+        border-bottom: 1px solid var(--line);
+      }
+      .campaign-table tr:last-child { border-bottom: 0; }
+      .campaign-table td {
+        border: 0;
+        padding: 0;
+        white-space: normal;
+      }
+      .campaign-table td:first-child {
+        position: static;
+        margin-bottom: 8px;
+        font-weight: 700;
+        background: transparent;
+      }
+      .campaign-table td:not(:first-child) {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 3px 0;
+      }
+      .campaign-table td:not(:first-child)::before {
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .campaign-table td:nth-child(2)::before { content: 'Показы'; }
+      .campaign-table td:nth-child(3)::before { content: 'Клики'; }
+      .campaign-table td:nth-child(4)::before { content: 'CTR'; }
+      .campaign-table td:nth-child(5)::before { content: 'Расход'; }
+      .campaign-table td:nth-child(6)::before { content: 'Конверсии'; }
+      .campaign-table td:nth-child(7)::before { content: 'CPA'; }
+    }
+
+    .client-switcher {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: -4px 0 14px;
+    }
+
+    .client-tab {
+      min-height: 36px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .client-tab.active {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div>
+        <h1 id="clientTitle">Сальве Кидс</h1>
+        <p class="sub" id="clientSubtitle">Дашборд рекламы по месяцам. Можно сравнивать март и апрель 2026.</p>
+      </div>
+      <a class="source-link" id="sourceLink" href="https://docs.google.com/spreadsheets/d/1mdNg30DQRUr16OFaJVKZom6TJ9c0SWFJfSyVTOrCYlc/edit" target="_blank" rel="noreferrer">Google-таблица</a>
+    </header>
+
+    <nav class="client-switcher" aria-label="Выбор клиента">
+      <button class="client-tab active" type="button" data-client="kids" aria-pressed="true">Сальве Кидс</button>
+      <button class="client-tab" type="button" data-client="adult" aria-pressed="false">Сальве Взрослая</button>
+    </nav>
+
+    <main id="app">
+      <div class="loading">Загружаю данные...</div>
+    </main>
+  </div>
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+window.DASHBOARD_DATASETS = {"kids": {"title": "Сальве Кидс", "subtitle": "Дашборд рекламы по месяцам. Можно сравнивать март и апрель 2026.", "sheetUrl": "https://docs.google.com/spreadsheets/d/1mdNg30DQRUr16OFaJVKZom6TJ9c0SWFJfSyVTOrCYlc/edit", "csvBase64": "0KLQuNC/INGB0YLRgNC+0LrQuCzQnNC10YHRj9GGLNCa0LDQvNC/0LDQvdC40Y8gLyDQv9C10YDQuNC+0LQsSUQg0LrQsNC80L/QsNC90LjQuCzQn9C+0LrQsNC30Yss0JrQu9C40LrQuCwiQ1RSLCAlIiwi0KDQsNGB0YXQvtC0LCDRgNGD0LEuIiwiQ1BDLCDRgNGD0LEuIizQmtC+0L3QstC10YDRgdC40Y8sIkNQQSwg0YDRg9CxLiIsIkNSINC60LvQuNC60LAg0LIg0LvQuNC0LCAlIgrQmNGC0L7QsyDQvNC10YHRj9GG0LAs0JzQsNGA0YIgMjAyNizQnNCw0YDRgiAyMDI2LCw5MjTCoDA5OSwyM8KgNDQ2LCIyLDU0IiwiNjjCoDY2OSwzMiIsIjIsOTMiLDcxLCI5NjcsMTciLCIwLDMwIgrQmtCw0LzQv9Cw0L3QuNGPLNCc0LDRgNGCIDIwMjYs0KHQsNC70YzQstC1INCa0LjQtNGBINC/0L7QuNGB0LosNzA0ODM1MjA3LDgzNCw4NCwiMTAsMDciLCIxMcKgNjUzLDQzIiwiMTM4LDczIiwxLCIxMcKgNjUzLDQzIiwiMSwxOSIK0JrQsNC80L/QsNC90LjRjyzQnNCw0YDRgiAyMDI2LNCh0LDQu9GM0LLQtSDQmtCY0JTQoSDQoNCh0K8sNzA0ODM1MjE5LDQwNcKgMTcwLDE0wqA0MzgsIjMsNTYiLCIyMsKgMjQ1LDg5IiwiMSw1NCIsNTUsIjQwNCw0NyIsIjAsMzgiCtCa0LDQvNC/0LDQvdC40Y8s0JzQsNGA0YIgMjAyNixzYWx2ZWtpZHMucnUg0L7RgsKgMTcuMTEuMjUsNzA0OTE5MjI5LDUxOMKgMDk1LDjCoDkyNCwiMSw3MiIsMzTCoDc3MCwiMyw5MCIsMTUsMsKgMzE4LCIwLDE3IgrQktGL0LLQvtC0INC30LAg0LzQtdGB0Y/RhizQnNCw0YDRgiAyMDI2LCLQkdCw0LfQvtCy0YvQuSDQvNC10YHRj9GGINC00LvRjyDRgdGA0LDQstC90LXQvdC40Y86INGE0LjQutGB0LjRgNGD0LXQvCDRgdGC0LDRgNGC0L7QstGL0LUg0LfQvdCw0YfQtdC90LjRjyDQv9C+INC70LjQtNCw0Lwg0LggQ1BBLiDQoNC10LrQvtC80LXQvdC00LDRhtC40Y86INC70YPRh9GI0LjQuSBDUEEg0YMg0LrQsNC80L/QsNC90LjQuCDCq9Ch0LDQu9GM0LLQtSDQmtCY0JTQoSDQoNCh0K/CuyAoNDA0LjQ3INGA0YPQsS4pOyDQv9C10YDQtdGB0LzQvtGC0YDQtdGC0Ywg0LrQsNC80L/QsNC90LjQuCDRgSDQstGL0YHQvtC60LjQvCBDUEE6IMKr0KHQsNC70YzQstC1INCa0LjQtNGBINC/0L7QuNGB0LrCuywgwqtzYWx2ZWtpZHMucnUg0L7RgsKgMTcuMTEuMjXCuy4iLCwsLCwsLCwsCtCY0YLQvtCzINC80LXRgdGP0YbQsCzQkNC/0YDQtdC70YwgMjAyNizQkNC/0YDQtdC70YwgMjAyNiwsNDAywqA0MTIsMTfCoDM2MCwiNCwzMSIsIjI4wqA0MTgsMDciLCIxLDY0Iiw0OCwiNTkyLDA0IiwiMCwyOCIK0JrQsNC80L/QsNC90LjRjyzQkNC/0YDQtdC70YwgMjAyNizQodCw0LvRjNCy0LUg0JrQmNCU0KEg0KDQodCvLDcwNDgzNTIxOSwyNTHCoDgxNSwxMcKgNTkxLCI0LDYwIiwiMTjCoDY1OCwwNyIsIjEsNjEiLDM2LCI1MTgsMjgiLCIwLDMxIgrQmtCw0LzQv9Cw0L3QuNGPLNCQ0L/RgNC10LvRjCAyMDI2LHNhbHZla2lkcy5ydSDQvtGCwqAxNy4xMS4yNSw3MDQ5MTkyMjksMTUwwqA1OTcsNcKgNzY5LCIzLDgzIiw5wqA3NjAsIjEsNjkiLDEyLCI4MTMsMzMiLCIwLDIxIgrQktGL0LLQvtC0INC30LAg0LzQtdGB0Y/RhizQkNC/0YDQtdC70YwgMjAyNiwi0Jog0L/RgNC10LTRi9C00YPRidC10LzRgyDQvNC10YHRj9GG0YM6INC70LjQtNGLIC0zMiUsIENQQSAtMzklICjRg9C70YPRh9GI0LXQvdC40LUpLiDQoNC10LrQvtC80LXQvdC00LDRhtC40Y86INC70YPRh9GI0LjQuSBDUEEg0YMg0LrQsNC80L/QsNC90LjQuCDCq9Ch0LDQu9GM0LLQtSDQmtCY0JTQoSDQoNCh0K/CuyAoNTE4LjI4INGA0YPQsS4pLiIsLCwsLCwsLCwK"}, "adult": {"title": "Сальве Взрослая", "subtitle": "Дашборд рекламы по месяцам. Можно сравнивать март и апрель 2026.", "sheetUrl": "https://docs.google.com/spreadsheets/d/1mdNg30DQRUr16OFaJVKZom6TJ9c0SWFJfSyVTOrCYlc/edit", "csvBase64": "0KLQuNC/INGB0YLRgNC+0LrQuCzQnNC10YHRj9GGLNCa0LDQvNC/0LDQvdC40Y8gLyDQv9C10YDQuNC+0LQsSUQg0LrQsNC80L/QsNC90LjQuCzQn9C+0LrQsNC30Yss0JrQu9C40LrQuCwiQ1RSLCAlIiwi0KDQsNGB0YXQvtC0LCDRgNGD0LEuIiwiQ1BDLCDRgNGD0LEuIizQmtC+0L3QstC10YDRgdC40Y8sIkNQQSwg0YDRg9CxLiIsIkNSINC60LvQuNC60LAg0LIg0LvQuNC0LCAlIgrQmNGC0L7QsyDQvNC10YHRj9GG0LAs0JzQsNGA0YIgMjAyNizQnNCw0YDRgiAyMDI2LCwzNzDCoDk3MCwxMMKgMTA1LCIyLDcyIiwiNTDCoDEwNiwzMSIsIjQsOTYiLDI3LCIxwqA4NTUsNzkiLCIwLDI3IgrQmtCw0LzQv9Cw0L3QuNGPLNCc0LDRgNGCIDIwMjYsMdCV0J/QmiDQodCw0LvRjNCy0LUg0KDQodCvINCl0JzQkNCeLDExMzA2NDQwNSwxNzbCoDE2OSw2wqAxNjMsIjMsNTAiLCIxOMKgOTAwLDQzIiwiMywwNyIsMTUsIjHCoDI2MCwwMyIsIjAsMjQiCtCa0LDQvNC/0LDQvdC40Y8s0JzQsNGA0YIgMjAyNiwx0JXQn9CaINCh0LDQu9GM0LLQtSDQv9C+0LjRgdC6INCl0JzQkNCeLDExMzA2NDQxNCwzwqA3OTAsMTc4LCI0LDcwIiwiMTjCoDc2MSw4OCIsIjEwNSw0MCIsNCwiNMKgNjkwLDQ3IiwiMiwyNSIK0JrQsNC80L/QsNC90LjRjyzQnNCw0YDRgiAyMDI2LNCc0JogMiBzYWx2ZS5kZW50YWwg0L7RgsKgMTQuMTEuMjQsMTE1NzQzMjc5LDE5McKgMDExLDPCoDc2NCwiMSw5NyIsMTLCoDQ0NCwiMywzMSIsOCwiMcKgNTU1LDUwIiwiMCwyMSIK0JLRi9Cy0L7QtCDQt9CwINC80LXRgdGP0YYs0JzQsNGA0YIgMjAyNizQkdCw0LfQvtCy0YvQuSDQvNC10YHRj9GGINC00LvRjyDRgdGA0LDQstC90LXQvdC40Y86INGE0LjQutGB0LjRgNGD0LXQvCDRgdGC0LDRgNGC0L7QstGL0LUg0LfQvdCw0YfQtdC90LjRjyDQv9C+INC70LjQtNCw0Lwg0LggQ1BBLiDQoNC10LrQvtC80LXQvdC00LDRhtC40Y86INC70YPRh9GI0LjQuSBDUEEg0YMg0LrQsNC80L/QsNC90LjQuCDCqzHQldCf0Jog0KHQsNC70YzQstC1INCg0KHQryDQpdCc0JDQnsK7ICgxMjYwLjAzINGA0YPQsS4pOyDQv9C10YDQtdGB0LzQvtGC0YDQtdGC0Ywg0LrQsNC80L/QsNC90LjQuCDRgSDQstGL0YHQvtC60LjQvCBDUEE6IMKrMdCV0J/QmiDQodCw0LvRjNCy0LUg0L/QvtC40YHQuiDQpdCc0JDQnsK7LiwsLCwsLCwsLArQmNGC0L7QsyDQvNC10YHRj9GG0LAs0JDQv9GA0LXQu9GMIDIwMjYs0JDQv9GA0LXQu9GMIDIwMjYsLDE5NsKgOTc5LDfCoDQ3OSwiMyw4MCIsIjIwwqA3MTYsNzYiLCIyLDc3IiwxOCwiMcKgMTUwLDkzIiwiMCwyNCIK0JrQsNC80L/QsNC90LjRjyzQkNC/0YDQtdC70YwgMjAyNiwx0JXQn9CaINCh0LDQu9GM0LLQtSDQoNCh0K8g0KXQnNCQ0J4sMTEzMDY0NDA1LDEyNcKgOTk3LDXCoDk3MCwiNCw3NCIsIjE2wqA1NjgsNzYiLCIyLDc4IiwxMiwiMcKgMzgwLDczIiwiMCwyMCIK0JrQsNC80L/QsNC90LjRjyzQkNC/0YDQtdC70YwgMjAyNizQnNCaIDIgc2FsdmUuZGVudGFsINC+0YLCoDE0LjExLjI0LDExNTc0MzI3OSw3MMKgOTgyLDHCoDUwOSwiMiwxMyIsNMKgMTQ4LCIyLDc1Iiw2LCI2OTEsMzMiLCIwLDQwIgrQktGL0LLQvtC0INC30LAg0LzQtdGB0Y/RhizQkNC/0YDQtdC70YwgMjAyNiwi0Jog0L/RgNC10LTRi9C00YPRidC10LzRgyDQvNC10YHRj9GG0YM6INC70LjQtNGLIC0zMyUsIENQQSAtMzglICjRg9C70YPRh9GI0LXQvdC40LUpLiDQoNC10LrQvtC80LXQvdC00LDRhtC40Y86INC70YPRh9GI0LjQuSBDUEEg0YMg0LrQsNC80L/QsNC90LjQuCDCq9Cc0JogMiBzYWx2ZS5kZW50YWwg0L7RgsKgMTQuMTEuMjTCuyAoNjkxLjMzINGA0YPQsS4pLiIsLCwsLCwsLCwK"}};
+for (const dataset of Object.values(window.DASHBOARD_DATASETS)) {
+  const bytes = Uint8Array.from(atob(dataset.csvBase64), (char) => char.charCodeAt(0));
+  dataset.csv = new TextDecoder().decode(bytes);
+}
+window.ACTIVE_DASHBOARD = 'kids';
+window.DASHBOARD_CSV = window.DASHBOARD_DATASETS[window.ACTIVE_DASHBOARD].csv;
+</script>
+  <script>
+    const csvUrl = 'sheet.csv';
+    const app = document.querySelector('#app');
+    const tooltip = document.querySelector('#tooltip');
+    const fmtInt = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+    const fmtMoney = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+    const fmtPct = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const monthOrder = {
+      'январь': 1, 'февраль': 2, 'март': 3, 'апрель': 4, 'май': 5, 'июнь': 6,
+      'июль': 7, 'август': 8, 'сентябрь': 9, 'октябрь': 10, 'ноябрь': 11, 'декабрь': 12
+    };
+    const monthShort = ['янв.', 'фев.', 'мар.', 'апр.', 'май', 'июн.', 'июл.', 'авг.', 'сен.', 'окт.', 'ноя.', 'дек.'];
+
+    let months = [];
+    let selected = new Set();
+    let expandedCampaignMonths = new Set();
+    let chartHandlers = [];
+
+    const clientTitle = document.querySelector('#clientTitle');
+    const clientSubtitle = document.querySelector('#clientSubtitle');
+    const sourceLink = document.querySelector('#sourceLink');
+    const clientButtons = [...document.querySelectorAll('[data-client]')];
+    let activeClient = window.ACTIVE_DASHBOARD || 'kids';
+
+    clientButtons.forEach((button) => {
+      button.addEventListener('click', () => loadDashboard(button.dataset.client));
+    });
+
+    loadDashboard(activeClient);
+
+    function loadDashboard(key) {
+      const dataset = window.DASHBOARD_DATASETS[key] || window.DASHBOARD_DATASETS.kids;
+      activeClient = key;
+      window.DASHBOARD_CSV = dataset.csv;
+      document.title = `${dataset.title} | Дашборд рекламы`;
+      clientTitle.textContent = dataset.title;
+      clientSubtitle.textContent = dataset.subtitle;
+      sourceLink.href = dataset.sheetUrl;
+      clientButtons.forEach((button) => {
+        const active = button.dataset.client === key;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      months = normalize(parseCsv(dataset.csv));
+      selected = new Set(months.slice(-6).map((month) => month.key));
+      expandedCampaignMonths = new Set();
+      render();
+    }
+
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let cell = '';
+      let quoted = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+        if (ch === '"' && quoted && next === '"') {
+          cell += '"';
+          i++;
+        } else if (ch === '"') {
+          quoted = !quoted;
+        } else if (ch === ',' && !quoted) {
+          row.push(cell);
+          cell = '';
+        } else if ((ch === '\n' || ch === '\r') && !quoted) {
+          if (ch === '\r' && next === '\n') i++;
+          row.push(cell);
+          if (row.some((value) => value.trim() !== '')) rows.push(row);
+          row = [];
+          cell = '';
+        } else {
+          cell += ch;
+        }
+      }
+      row.push(cell);
+      if (row.some((value) => value.trim() !== '')) rows.push(row);
+      return rows;
+    }
+
+    function normalize(rows) {
+      const byMonth = new Map();
+      rows.slice(1).forEach((row) => {
+        const type = clean(row[0]);
+        const monthName = clean(row[1]);
+        if (!monthName) return;
+        if (!byMonth.has(monthName)) {
+          byMonth.set(monthName, {
+            month: monthName,
+            label: shortLabel(monthName),
+            key: monthKey(monthName),
+            period: '',
+            impressions: 0,
+            clicks: 0,
+            ctr: 0,
+            spend: 0,
+            cpc: 0,
+            conversions: 0,
+            cpa: 0,
+            cr: 0,
+            conclusion: '',
+            campaigns: []
+          });
+        }
+        const item = byMonth.get(monthName);
+        if (type === 'Итог месяца') {
+          item.period = clean(row[2]);
+          item.impressions = number(row[4]);
+          item.clicks = number(row[5]);
+          item.ctr = number(row[6]);
+          item.spend = number(row[7]);
+          item.cpc = number(row[8]);
+          item.conversions = number(row[9]);
+          item.cpa = number(row[10]);
+          item.cr = number(row[11]);
+        }
+        if (type === 'Кампания') {
+          item.campaigns.push({
+            name: clean(row[2]),
+            id: clean(row[3]),
+            impressions: number(row[4]),
+            clicks: number(row[5]),
+            ctr: number(row[6]),
+            spend: number(row[7]),
+            cpc: number(row[8]),
+            conversions: number(row[9]),
+            cpa: number(row[10]),
+            cr: number(row[11])
+          });
+        }
+        if (type === 'Вывод за месяц') {
+          item.conclusion = clean(row[2]);
+        }
+      });
+      return [...byMonth.values()].sort((a, b) => a.key.localeCompare(b.key));
+    }
+
+    function clean(value) {
+      return String(value || '').replace(/\u00a0/g, ' ').trim();
+    }
+
+    function number(value) {
+      const raw = clean(value).replace(/\s/g, '').replace(',', '.').replace(/[^\d.-]/g, '');
+      return raw === '' ? 0 : Number(raw);
+    }
+
+    function monthKey(value) {
+      const parts = clean(value).toLowerCase().split(/\s+/);
+      const year = parts.find((part) => /^\d{4}$/.test(part)) || '0000';
+      const month = String(monthOrder[parts[0]] || 0).padStart(2, '0');
+      return `${year}-${month}`;
+    }
+
+    function shortLabel(value) {
+      const parts = clean(value).toLowerCase().split(/\s+/);
+      const idx = (monthOrder[parts[0]] || 1) - 1;
+      return `${monthShort[idx]} ${parts[1] || ''}`;
+    }
+
+    function selectedMonths() {
+      const list = months.filter((month) => selected.has(month.key));
+      return list.length ? list : months;
+    }
+
+    function render() {
+      chartHandlers.forEach((item) => item.canvas.removeEventListener('pointermove', item.move));
+      chartHandlers = [];
+      const current = selectedMonths();
+      const totals = aggregate(current);
+      app.innerHTML = `
+        <section class="toolbar">
+          <div class="month-grid">
+            ${monthSelector()}
+          </div>
+          <div class="toolbar-actions">
+            <button class="compact-btn primary" data-action="latest">Последние 6</button>
+            <button class="compact-btn" data-action="all">Все</button>
+            <button class="compact-btn" data-action="clear">Сброс</button>
+          </div>
+        </section>
+
+        <section class="kpis">
+          ${kpi('Показы', fmtInt.format(totals.impressions), deltaText(current, 'impressions'))}
+          ${kpi('Клики', fmtInt.format(totals.clicks), deltaText(current, 'clicks'))}
+          ${kpi('CTR', `${fmtPct.format(totals.ctr)}%`, deltaText(current, 'ctr', true))}
+          ${kpi('Расход', `${fmtMoney.format(totals.spend)} ₽`, deltaText(current, 'spend', false, true))}
+          ${kpi('Конверсии', fmtInt.format(totals.conversions), deltaText(current, 'conversions'), 'good')}
+          ${kpi('Цена конверсии', `${fmtMoney.format(totals.cpa)} ₽`, deltaText(current, 'cpa', true, true))}
+        </section>
+
+        ${current.length > 1 ? `
+          <section class="charts">
+            ${chartPanel('impressionsChart', 'Показы', [['Показы', '#1d6fd8']])}
+            ${chartPanel('clicksChart', 'Клики', [['Клики', '#15945f']])}
+            ${chartPanel('ctrChart', 'CTR', [['CTR', '#bd7a16']])}
+            ${chartPanel('convChart', 'Конверсии', [['Конверсии', '#15945f']])}
+            ${chartPanel('cpaChart', 'Цена конверсии', [['CPA', '#c94646']])}
+          </section>
+        ` : ''}
+
+        <section class="summary">
+          <div class="panel">
+            <div class="panel-head"><h2>Сводка по месяцам</h2></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Месяц</th><th>Показы</th><th>Клики</th><th>CTR</th><th>Расход</th><th>Конверсии</th><th>CPA</th></tr>
+                </thead>
+                <tbody>${current.map(monthRow).join('')}</tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Кампании по выбранным месяцам</h2>
+            <div class="legend">${current.length} мес. / ${current.reduce((sum, month) => sum + month.campaigns.length, 0)} кампаний</div>
+          </div>
+          <div class="campaign-groups">${current.map((month) => campaignMonth(month, current.length === 1 || expandedCampaignMonths.has(month.key))).join('')}</div>
+        </section>
+      `;
+
+      app.querySelectorAll('[data-month]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.dataset.month;
+          selected.has(key) ? selected.delete(key) : selected.add(key);
+          render();
+        });
+      });
+      app.querySelector('[data-action="latest"]').addEventListener('click', () => {
+        selected = new Set(months.slice(-6).map((month) => month.key));
+        render();
+      });
+      app.querySelector('[data-action="all"]').addEventListener('click', () => {
+        selected = new Set(months.map((month) => month.key));
+        render();
+      });
+      app.querySelector('[data-action="clear"]').addEventListener('click', () => {
+        selected = new Set();
+        render();
+      });
+      app.querySelectorAll('[data-campaign-month]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const key = button.dataset.campaignMonth;
+          expandedCampaignMonths.has(key) ? expandedCampaignMonths.delete(key) : expandedCampaignMonths.add(key);
+          render();
+        });
+      });
+
+      if (current.length > 1) drawCharts(current);
+    }
+
+    function monthSelector() {
+      const groups = months.reduce((acc, month) => {
+        const year = month.key.slice(0, 4);
+        if (!acc.has(year)) acc.set(year, []);
+        acc.get(year).push(month);
+        return acc;
+      }, new Map());
+      return [...groups.entries()].map(([year, items]) => `
+        <div class="year-group">
+          <span class="year-label">${year}</span>
+          <div class="month-row">
+            ${items.map((month) => `<button class="month-btn ${selected.has(month.key) ? 'active' : ''}" data-month="${month.key}" title="${month.month}">${month.label.split(' ')[0]}</button>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function kpi(label, value, meta, cls = '') {
+      return `<div class="kpi"><span>${label}</span><strong class="${cls}">${value}</strong><small>${meta}</small></div>`;
+    }
+
+    function chartPanel(id, title, legend) {
+      return `
+        <div class="panel">
+          <div class="panel-head">
+            <h2>${title}</h2>
+            <div class="legend">${legend.map(([name, color]) => `<span><i class="dot" style="background:${color}"></i>${name}</span>`).join('')}</div>
+          </div>
+          <div class="chart-wrap"><canvas id="${id}"></canvas></div>
+        </div>
+      `;
+    }
+
+    function aggregate(list) {
+      const totals = list.reduce((acc, item) => {
+        acc.impressions += item.impressions;
+        acc.clicks += item.clicks;
+        acc.spend += item.spend;
+        acc.conversions += item.conversions;
+        return acc;
+      }, { impressions: 0, clicks: 0, spend: 0, conversions: 0 });
+      totals.ctr = totals.impressions ? totals.clicks / totals.impressions * 100 : 0;
+      totals.cpc = totals.clicks ? totals.spend / totals.clicks : 0;
+      totals.cpa = totals.conversions ? totals.spend / totals.conversions : 0;
+      return totals;
+    }
+
+    function deltaText(list, field, percent = false, inverse = false) {
+      if (list.length < 2) return 'Выберите 2+ месяца для сравнения';
+      const first = list[0][field];
+      const last = list[list.length - 1][field];
+      if (!first) return 'Динамика: нет базы';
+      const delta = (last - first) / first * 100;
+      const sign = delta > 0 ? '+' : '';
+      const isGood = inverse ? delta < 0 : delta > 0;
+      return `От ${list[0].label} к ${list[list.length - 1].label}: ${sign}${fmtPct.format(delta)}% ${isGood ? 'лучше' : 'хуже'}`;
+    }
+
+    function monthRow(month) {
+      return `<tr>
+        <td>${month.month}</td>
+        <td>${fmtInt.format(month.impressions)}</td>
+        <td>${fmtInt.format(month.clicks)}</td>
+        <td>${fmtPct.format(month.ctr)}%</td>
+        <td>${fmtMoney.format(month.spend)} ₽</td>
+        <td class="good">${fmtInt.format(month.conversions)}</td>
+        <td>${fmtMoney.format(month.cpa)} ₽</td>
+      </tr>`;
+    }
+
+    function campaignMonth(month, isOpen) {
+      return `
+        <section class="campaign-month ${isOpen ? '' : 'collapsed'}">
+          <button class="campaign-toggle" type="button" data-campaign-month="${month.key}" aria-expanded="${isOpen}">
+            <strong>${month.month}</strong>
+            <span>${month.campaigns.length} кампаний / расход ${fmtMoney.format(month.spend)} ₽</span>
+          </button>
+          <div class="table-wrap campaign-table">
+            <table>
+              <thead>
+                <tr><th>Кампания</th><th>Показы</th><th>Клики</th><th>CTR</th><th>Расход</th><th>Конверсии</th><th>CPA</th></tr>
+              </thead>
+              <tbody>${month.campaigns.map((campaign) => campaignRow(month, campaign)).join('')}</tbody>
+            </table>
+          </div>
+        </section>
+      `;
+    }
+
+    function campaignRow(month, campaign) {
+      return `<tr>
+        <td>${campaign.name}</td>
+        <td>${fmtInt.format(campaign.impressions)}</td>
+        <td>${fmtInt.format(campaign.clicks)}</td>
+        <td>${fmtPct.format(campaign.ctr)}%</td>
+        <td>${fmtMoney.format(campaign.spend)} ₽</td>
+        <td class="good">${fmtInt.format(campaign.conversions)}</td>
+        <td>${campaign.cpa ? `${fmtMoney.format(campaign.cpa)} ₽` : '0 ₽'}</td>
+      </tr>`;
+    }
+
+    function drawCharts(list) {
+      drawBars('impressionsChart', list, { label: 'Показы', field: 'impressions', color: '#1d6fd8' });
+      drawLine('clicksChart', list, { label: 'Клики', field: 'clicks', color: '#15945f', suffix: '', format: (value) => fmtInt.format(value) });
+      drawLine('ctrChart', list, { label: 'CTR', field: 'ctr', color: '#bd7a16', suffix: '%', format: (value) => fmtPct.format(value) });
+      drawBars('convChart', list, { label: 'Конверсии', field: 'conversions', color: '#15945f' });
+      drawLine('cpaChart', list, { label: 'CPA', field: 'cpa', color: '#c94646', suffix: ' ₽', format: (value) => fmtMoney.format(value) });
+    }
+
+    function prep(canvasId) {
+      const canvas = document.querySelector(`#${canvasId}`);
+      const rect = canvas.getBoundingClientRect();
+      const scale = window.devicePixelRatio || 1;
+      canvas.width = Math.round(rect.width * scale);
+      canvas.height = Math.round(rect.height * scale);
+      const ctx = canvas.getContext('2d');
+      ctx.scale(scale, scale);
+      const isMobile = rect.width < 430;
+      const pad = isMobile
+        ? { top: 14, right: 10, bottom: 48, left: 46 }
+        : { top: 16, right: 16, bottom: 34, left: 52 };
+      return { canvas, ctx, width: rect.width, height: rect.height, pad, isMobile };
+    }
+
+    function drawGrid(ctx, w, h, pad, max) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = '#e8edf4';
+      ctx.fillStyle = '#657184';
+      ctx.font = `${pad.bottom > 40 ? 11 : 12}px Segoe UI, Arial`;
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.top + (h - pad.top - pad.bottom) * i / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.left, y);
+        ctx.lineTo(w - pad.right, y);
+        ctx.stroke();
+        const value = max * (1 - i / 4);
+        ctx.fillText(shortNumber(value, pad.bottom > 40), pad.left - 8, y);
+      }
+    }
+
+    function drawLabels(ctx, list, w, h, pad) {
+      const innerW = w - pad.left - pad.right;
+      ctx.fillStyle = '#657184';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.font = `${pad.bottom > 40 ? 11 : 12}px Segoe UI, Arial`;
+      list.forEach((item, idx) => {
+        const x = pad.left + innerW * (idx + .5) / list.length;
+        const label = item.label.split(' ');
+        ctx.fillText(label[0], x, h - pad.bottom + 8);
+        ctx.fillText(label.slice(1).join(' '), x, h - pad.bottom + 22);
+      });
+    }
+
+    function drawBars(canvasId, list, series) {
+      const box = prep(canvasId);
+      const max = Math.max(1, ...list.map((item) => item[series.field]));
+      const points = [];
+      drawGrid(box.ctx, box.width, box.height, box.pad, max);
+      const innerW = box.width - box.pad.left - box.pad.right;
+      const innerH = box.height - box.pad.top - box.pad.bottom;
+      const slot = innerW / list.length;
+      const barW = Math.min(42, slot * .56);
+      list.forEach((item, idx) => {
+        const x = box.pad.left + slot * idx + (slot - barW) / 2;
+        const barH = innerH * item[series.field] / max;
+        const y = box.pad.top + innerH - barH;
+        box.ctx.fillStyle = series.color;
+        roundRect(box.ctx, x, y, barW, barH, 5);
+        points.push({ x: x + barW / 2, y, label: `${item.month}\n${series.label}: ${fmtInt.format(item[series.field])}${series.suffix || ''}` });
+      });
+      drawLabels(box.ctx, list, box.width, box.height, box.pad);
+      bindTooltip(box.canvas, points, plotArea(box));
+    }
+
+    function drawGroupedBars(canvasId, list, seriesList) {
+      const box = prep(canvasId);
+      const max = Math.max(1, ...list.flatMap((item) => seriesList.map((series) => item[series.field])));
+      const points = [];
+      drawGrid(box.ctx, box.width, box.height, box.pad, max);
+      const innerW = box.width - box.pad.left - box.pad.right;
+      const innerH = box.height - box.pad.top - box.pad.bottom;
+      const slot = innerW / list.length;
+      const barW = Math.min(22, slot * .25);
+      list.forEach((item, idx) => {
+        seriesList.forEach((series, sidx) => {
+          const x = box.pad.left + slot * idx + slot / 2 + (sidx - .5) * (barW + 4);
+          const barH = innerH * item[series.field] / max;
+          const y = box.pad.top + innerH - barH;
+          box.ctx.fillStyle = series.color;
+          roundRect(box.ctx, x, y, barW, barH, 4);
+          points.push({ x: x + barW / 2, y, label: `${item.month}\n${series.label}: ${fmtInt.format(item[series.field])}` });
+        });
+      });
+      drawLabels(box.ctx, list, box.width, box.height, box.pad);
+      bindTooltip(box.canvas, points, plotArea(box));
+    }
+
+    function drawLine(canvasId, list, series) {
+      const box = prep(canvasId);
+      const max = Math.max(1, ...list.map((item) => item[series.field])) * 1.08;
+      const points = [];
+      drawGrid(box.ctx, box.width, box.height, box.pad, max);
+      const innerW = box.width - box.pad.left - box.pad.right;
+      const innerH = box.height - box.pad.top - box.pad.bottom;
+      list.forEach((item, idx) => {
+        const x = list.length === 1 ? box.pad.left + innerW / 2 : box.pad.left + innerW * idx / (list.length - 1);
+        const y = box.pad.top + innerH - innerH * item[series.field] / max;
+        points.push({ x, y, label: `${item.month}\n${series.label}: ${series.format(item[series.field])}${series.suffix}` });
+      });
+      box.ctx.strokeStyle = series.color;
+      box.ctx.lineWidth = 3;
+      box.ctx.beginPath();
+      points.forEach((point, idx) => idx ? box.ctx.lineTo(point.x, point.y) : box.ctx.moveTo(point.x, point.y));
+      box.ctx.stroke();
+      points.forEach((point) => {
+        box.ctx.fillStyle = '#ffffff';
+        box.ctx.strokeStyle = series.color;
+        box.ctx.lineWidth = 3;
+        box.ctx.beginPath();
+        box.ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+        box.ctx.fill();
+        box.ctx.stroke();
+      });
+      drawLabels(box.ctx, list, box.width, box.height, box.pad);
+      bindTooltip(box.canvas, points, plotArea(box));
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      const height = Math.max(1, h);
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(x, y, w, height, Math.min(r, height / 2));
+      } else {
+        ctx.rect(x, y, w, height);
+      }
+      ctx.fill();
+    }
+
+    function plotArea(box) {
+      return {
+        left: box.pad.left,
+        right: box.width - box.pad.right,
+        top: box.pad.top,
+        bottom: box.height - box.pad.bottom
+      };
+    }
+
+    function bindTooltip(canvas, points, plot) {
+      const move = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const inPlot = x >= plot.left - 12 && x <= plot.right + 12 && y >= plot.top - 12 && y <= plot.bottom + 34;
+        let hit = nearestPoint(points, x, y, false);
+        if (!hit && inPlot) hit = nearestPoint(points, x, y, true);
+        if (!hit) {
+          tooltip.style.opacity = 0;
+          return;
+        }
+        tooltip.textContent = hit.label;
+        tooltip.style.left = `${event.clientX}px`;
+        tooltip.style.top = `${event.clientY}px`;
+        tooltip.style.opacity = 1;
+      };
+      canvas.addEventListener('pointermove', move);
+      canvas.addEventListener('pointerleave', () => { tooltip.style.opacity = 0; });
+      chartHandlers.push({ canvas, move });
+    }
+
+    function nearestPoint(points, x, y, byColumn) {
+      let best = null;
+      let bestScore = Infinity;
+      points.forEach((point) => {
+        const score = byColumn ? Math.abs(point.x - x) : Math.hypot(point.x - x, point.y - y);
+        if (score < bestScore) {
+          best = point;
+          bestScore = score;
+        }
+      });
+      if (!best) return null;
+      return byColumn || bestScore < 28 ? best : null;
+    }
+
+    function shortNumber(value, compact = false) {
+      if (compact) {
+        if (value >= 1000000) return `${formatAxis(value / 1000000)}м`;
+        if (value >= 1000) return `${formatAxis(value / 1000)}к`;
+      }
+      if (value >= 1000000) return `${formatAxis(value / 1000000)} млн`;
+      if (value >= 1000) return `${formatAxis(value / 1000)} тыс`;
+      return fmtInt.format(value);
+    }
+
+    function formatAxis(value) {
+      return new Intl.NumberFormat('ru-RU', {
+        maximumFractionDigits: value >= 10 ? 0 : 1
+      }).format(value);
+    }
+
+    window.addEventListener('resize', () => render());
+  </script>
+</body>
+</html>
