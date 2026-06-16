@@ -5,4 +5,5 @@ site/
 start-dashboard.cmd
 *.xlsx
 build_*.py
+validate_*.py
 __pycache__/
